@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vector_math/vector_math.dart' as math;
 
 import 'app_text.dart';
@@ -135,78 +134,41 @@ void scaleAlertDialog({
     transitionBuilder: (ctx, a1, a2, child) {
       var curve = Curves.easeInOut.transform(a1.value);
       return Transform.scale(
-        scale: curve,
-        child: GetPlatform.isIOS
-            ? CupertinoAlertDialog(
-                title: AppText(
-                  title,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 18,
-                ),
-                content: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AppText(
-                    body,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
+          scale: curve,
+          child: CupertinoAlertDialog(
+            title: AppText(
+              title,
+              fontWeight: FontWeight.w900,
+              fontSize: 18,
+            ),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AppText(
+                body,
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            actions: [
+              if (onConfirmClick != null)
+                TextButton(
+                  onPressed: onConfirmClick,
+                  child: Text(
+                    confirmText ?? "Confirm",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                actions: [
-                  if (onConfirmClick != null)
-                    TextButton(
-                      onPressed: onConfirmClick,
-                      child: Text(
-                        confirmText ?? "Confirm",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  if (onCancelClick != null)
-                    TextButton(
-                      onPressed: onCancelClick,
-                      child: Text(
-                        cancelText ?? "Cancel",
-                        style: const TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                ],
-              )
-            : AlertDialog(
-                title: AppText(
-                  title,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 18,
+              if (onCancelClick != null)
+                TextButton(
+                  onPressed: onCancelClick,
+                  child: Text(
+                    cancelText ?? "Cancel",
+                    style: const TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.w700),
+                  ),
                 ),
-                content: AppText(
-                  body,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                actions: <Widget>[
-                  if (onConfirmClick != null)
-                    TextButton(
-                      onPressed: onConfirmClick,
-                      child: Text(
-                        confirmText ?? "Confirm",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  if (onCancelClick != null)
-                    TextButton(
-                      onPressed: onCancelClick,
-                      child: Text(
-                        cancelText ?? "Cancel",
-                        style: const TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.w700),
-                      ),
-                    )
-                ],
-              ),
-      );
+            ],
+          ));
     },
   );
 }

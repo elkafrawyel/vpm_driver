@@ -1,12 +1,18 @@
 import 'package:driver/app/extensions/space.dart';
 import 'package:driver/app/res/res.dart';
+import 'package:driver/app/util/information_viewer.dart';
+import 'package:driver/app/util/operation_reply.dart';
 import 'package:driver/controller/app_config_controller.dart';
+import 'package:driver/data/models/user_response.dart';
+import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:driver/widgets/app_widgets/app_progress_button.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:driver/widgets/app_widgets/app_text_field/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
+
+import '../../data/providers/storage/local_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,13 +52,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintText: 'email'.tr,
                 validateEmptyText: 'email_is_required'.tr,
                 appFieldType: AppFieldType.email,
+                textInputAction: TextInputAction.next,
               ),
               AppTextFormField(
                 key: passwordState,
                 controller: passwordController,
                 hintText: 'password'.tr,
                 validateEmptyText: 'password_is_required'.tr,
-                appFieldType: AppFieldType.password,
+                appFieldType: AppFieldType.text,
+                textInputAction: TextInputAction.done,
               ),
               GestureDetector(
                 onTap: () {},
@@ -82,17 +90,32 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login(AnimationController animationController) async {
-    // if (emailController.text.isEmpty) {
-    //   emailState.currentState?.shake();
-    //   return;
-    // } else if (passwordController.text.isEmpty) {
-    //   passwordState.currentState?.shake();
-    //   return;
-    // } else {
-    //   animationController.forward();
-    //
-      Get.find<AppConfigController>().isLoggedIn.value = true;
-      // animationController.reverse();
-    // }
+    if (emailController.text.isEmpty) {
+      emailState.currentState?.shake();
+      return;
+    } else if (passwordController.text.isEmpty) {
+      passwordState.currentState?.shake();
+      return;
+    } else {
+      animationController.forward();
+      OperationReply operationReply =
+          await APIProvider.instance.post<UserResponse>(
+        endPoint: Res.apiLogin,
+        fromJson: UserResponse.fromJson,
+        requestBody: {
+          'user': emailController.text,
+          'password': passwordController.text,
+        },
+      );
+      animationController.reverse();
+
+      if (operationReply.isSuccess()) {
+        UserResponse userResponse = operationReply.result;
+        await LocalProvider().saveUser(userResponse.userModel);
+        Get.find<AppConfigController>().isLoggedIn.value = true;
+      } else {
+        InformationViewer.showErrorToast(msg: operationReply.message);
+      }
+    }
   }
 }

@@ -199,6 +199,13 @@ Map<String, String> ar = {
   'add': 'إضافة',
   'take_photo': 'تصوير السيارة',
   'scan_owner': 'يرجى مسح QR صاحب السيارة للحصول على معلوماته',
-  'max_image_count_is_5':'الحد الأقصى لعدد الصور هو 5',
-
+  'max_image_count_is_5': 'الحد الأقصى لعدد الصور هو 5',
+  'LoadingMore': 'جارٍ تحميل المزيد',
+  'LoadingMoreEnd': 'لا توجد المزيد من البيانات',
+  'today': 'اليوم',
+  'yesterday': 'أمس',
+  'accept_request': 'قبول الطلب',
+  'empty_requests': 'لا توجد طلبات في الوقت الحالي',
+  'refresh': 'تحديث',
+  'end_park':'إنهاء الركنة'
 };

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -40,5 +41,10 @@ class Utils {
     ).format(
       num.parse(number),
     )} ${symbol ?? (Get.locale?.languageCode == 'ar' ? 'ريال' : 'SAR')}';
+  }
+
+  void playSound() async {
+    final player = AudioPlayer();
+    await player.play(AssetSource('audio/sound.mp3'));
   }
 }

@@ -66,13 +66,15 @@ class HandleApiState extends StatelessWidget {
         case OperationStatus.success:
           return child;
         case OperationStatus.failed:
-          return ApiErrorView(errorText: operationReply!.message);
+          return ApiErrorView(
+            errorText: operationReply!.message,
+          );
         case OperationStatus.disConnected:
           return const ApiConnectionErrorView();
         case OperationStatus.empty:
           return emptyView ??
               ApiEmptyView(
-                emptyText: generalController!.operationReply.message,
+                emptyText: operationReply!.message,
               );
         default:
           return const SizedBox();

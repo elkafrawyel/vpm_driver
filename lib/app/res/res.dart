@@ -9,23 +9,11 @@ class Res {
   //========================== Api Endpoints  ===============================
   static const apiLogin = 'auth/login';
   static const apiLogout = 'auth/logout';
-  static const apiRegister = 'auth/register';
-  static const apiProfile = 'auth/profile';
-  static const apiUploadFile = 'storage/file';
-  static const apiUpdateProfile = 'auth/profile';
-  static const apiCreateContact = 'customer/contact';
-  static const apiAllContact = 'customer/contacts';
-  static const apiDeleteUser = 'customer/contact';
-  static const apiCarColors = 'constants/car-colors-list';
-  static const apiCarTypes = 'constants/car-types-list';
-  static const apiCar = 'customer/car';
-  static const apiAllCars = 'customer/cars';
-  static const apiAllAdvertisements = 'customer/advertisements';
-  static const apiGetBalance = 'customer/current-balance';
-  static const apiGetPaymentOptions = 'constants/charge-price-list';
-  static const apiChargeBalance = 'customer/charge-balance';
-  static const apiSearchGarages = 'customer/garages/search';
-  static const apiBookingList = 'customer/parked-cars/search';
+  static const apiRequests = 'driver/request-drivers';
+  static const apiAcceptRequest = 'driver/request-driver-accept';
+  static const apiStartParking = 'driver/start-parking-car';
+  static const apiEndParking = 'driver/end-parking-car';
+  static const apiGetParkingList = 'driver/parked-cars/search';
 
   //========================== Animation Assets  ===============================
   static const animApiLoading = 'assets/anim/api_loading.json';
@@ -65,6 +53,7 @@ class Res {
   static const String iconCamera = 'assets/icons/camera.svg';
   static const String iconBlueBorder = 'assets/icons/blue_border.svg';
   static const String iconRedBorder = 'assets/icons/red_border.svg';
+  static const String iconEmptyRequests = 'assets/icons/empty_requests.svg';
 
   //========================== Images Assets  ===============================
   static const logoImage = "assets/images/launcher/logo.png";

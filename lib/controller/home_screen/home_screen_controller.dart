@@ -1,5 +1,4 @@
 import 'package:driver/screens/home/pages/add_valet/add_valet_screen.dart';
-import 'package:driver/screens/home/pages/dashboard/dashboard_screen.dart';
 import 'package:driver/screens/home/pages/history/history_screen.dart';
 import 'package:driver/screens/home/pages/menu/menu_screen.dart';
 import 'package:fcm_config/fcm_config.dart';
@@ -9,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../app/util/util.dart';
 import '../../firebase_options.dart';
+import '../../screens/home/pages/notifications/notifications_screen.dart';
 import '../../screens/home/pages/requests/requets_screen.dart';
 
 class HomeScreenController extends GetxController {
@@ -23,10 +23,10 @@ class HomeScreenController extends GetxController {
     selectedTabIndex = 0;
     pageController = PageController(initialPage: 0);
     pages = [
-      const DashboardScreen(),
       const RequestsScreen(),
-      const AddValetScreen(),
       const HistoryScreen(),
+      const AddValetScreen(),
+      const NotificationsScreen(),
       const MenuScreen(),
     ];
     initializeNotifications();

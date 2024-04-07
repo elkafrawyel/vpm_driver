@@ -28,7 +28,7 @@ class APIProvider {
         HttpHeaders.acceptHeader: 'application/json',
         HttpHeaders.cacheControlHeader: 'no-Cache',
         HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
-        // HttpHeaders.authorizationHeader: 'Bearer ${LocalProvider().getUser()?.token ?? 'No Token Found'}',
+        HttpHeaders.authorizationHeader: 'Bearer ${LocalProvider().getUser()?.token ?? 'No Token Found'}',
         HttpHeaders.acceptLanguageHeader: LocalProvider().getAppLanguage()
       },
       followRedirects: false,

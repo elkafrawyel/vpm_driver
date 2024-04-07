@@ -25,11 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
           unselectedItemColor: hintColor,
           type: BottomNavigationBarType.fixed,
           items: [
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home_outlined, color: hintColor),
-              activeIcon: const Icon(Icons.home_outlined, color: Colors.black),
-              label: 'home'.tr,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: const Icon(Icons.home_outlined, color: hintColor),
+            //   activeIcon: const Icon(Icons.home_outlined, color: Colors.black),
+            //   label: 'home'.tr,
+            // ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.pending_actions_rounded, color: hintColor),
               activeIcon: const Icon(
@@ -39,14 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'requests'.tr,
             ),
             BottomNavigationBarItem(
+              icon: const Icon(Icons.history, color: hintColor),
+              activeIcon: const Icon(Icons.history, color: Colors.black),
+              label: 'history'.tr,
+            ),
+            BottomNavigationBarItem(
               icon: const Icon(Icons.add, color: hintColor),
               activeIcon: const Icon(Icons.add, color: Colors.black),
               label: 'add'.tr,
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.history, color: hintColor),
-              activeIcon: const Icon(Icons.history, color: Colors.black),
-              label: 'history'.tr,
+              icon: const Icon(Icons.notifications, color: hintColor),
+              activeIcon: const Icon(Icons.notifications, color: Colors.black),
+              label: 'notifications'.tr,
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.menu, color: hintColor),

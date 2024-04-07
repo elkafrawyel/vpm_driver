@@ -1,4 +1,6 @@
 import 'package:driver/app/extensions/space.dart';
+import 'package:driver/app/res/res.dart';
+import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:driver/widgets/app_widgets/app_cached_image.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/route_manager.dart';
 
+import '../../../../app/util/information_viewer.dart';
+import '../../../../app/util/operation_reply.dart';
+import '../../../../data/models/general_response.dart';
 import '../../../../data/providers/storage/local_provider.dart';
 import '../../../../widgets/app_widgets/app_dialog.dart';
 import '../../../../widgets/app_widgets/language_views/app_language_switch.dart';
@@ -29,20 +34,19 @@ class _MenuScreenState extends State<MenuScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             50.ph,
-            const Center(
+            Center(
               child: AppCachedImage(
-                imageUrl:
-                    'https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+                imageUrl: LocalProvider().getUser()?.avatar?.filePath ?? '',
                 isCircular: true,
                 width: 140,
                 height: 140,
                 borderColor: Colors.black,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: AppText(
-                'Mahmoud Ashraf',
+                LocalProvider().getUser()?.name ?? '',
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -200,16 +204,21 @@ class _MenuScreenState extends State<MenuScreen> {
   void _logout() async {
     EasyLoading.show();
 
-    // OperationReply operationReply = await AuthRepositoryIml().logOut();
-    // if (operationReply.isSuccess()) {
-    //   GeneralResponse generalResponse = operationReply.result;
-    //   EasyLoading.dismiss();
-    //   InformationViewer.showSnackBar(generalResponse.message);
-    //   await Future.delayed(const Duration(milliseconds: 500));
-    await LocalProvider().signOut();
+    OperationReply operationReply =
+        await APIProvider.instance.post<GeneralResponse>(
+      endPoint: Res.apiLogout,
+      fromJson: GeneralResponse.fromJson,
+      requestBody: {},
+    );
     EasyLoading.dismiss();
-    // } else {
-    //   InformationViewer.showSnackBar(operationReply.message);
-    // }
+
+    if (operationReply.isSuccess()) {
+      GeneralResponse generalResponse = operationReply.result;
+      InformationViewer.showSnackBar(generalResponse.message);
+      await Future.delayed(const Duration(milliseconds: 500));
+      await LocalProvider().signOut();
+    } else {
+      InformationViewer.showSnackBar(operationReply.message);
+    }
   }
 }

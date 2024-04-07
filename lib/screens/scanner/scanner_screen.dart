@@ -1,6 +1,14 @@
 import 'dart:io';
 
+import 'package:driver/app/res/res.dart';
+import 'package:driver/app/util/information_viewer.dart';
+import 'package:driver/app/util/operation_reply.dart';
+import 'package:driver/app/util/util.dart';
+import 'package:driver/controller/home_screen/history_controller.dart';
+import 'package:driver/data/models/start_parking_response.dart';
+import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -16,8 +24,12 @@ class _ScannerScreenState extends State<ScannerScreen> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
+  @override
+  void initState() {
+    getUserByCode('9b58836c-10cd-4dc6-8009-c86c909f83f0');
+    super.initState();
+  }
+
   @override
   void reassemble() {
     super.reassemble();
@@ -25,34 +37,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
       controller!.pauseCamera();
     }
     controller!.resumeCamera();
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) async {
-      setState(() {
-        result = scanData;
-      });
-      if (result != null && (result?.code ?? '').isNotEmpty) {
-        await controller.stopCamera();
-        String code = result!.code.toString();
-        debugPrint('Scanner result : $code');
-        getUserByCode(code);
-        //todo get user info by id from qr
-        await controller.resumeCamera();
-      }
-    });
-  }
-
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    debugPrint('${DateTime.now().toIso8601String()}_onPermissionSet $p');
-    if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
-      );
-    }
   }
 
   @override
@@ -84,7 +68,53 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
-  void getUserByCode(String code)async {
-    Get.back(result: code);
+  void getUserByCode(String code) async {
+    await Future.delayed(const Duration(seconds: 2));
+    OperationReply operationReply =
+        await APIProvider.instance.post<StartParkingResponse>(
+      endPoint: Res.apiStartParking,
+      fromJson: StartParkingResponse.fromJson,
+      requestBody: {
+        'user_id': code,
+      },
+    );
+    if (operationReply.isSuccess()) {
+      StartParkingResponse startParkingResponse = operationReply.result;
+      Get.back(result: startParkingResponse.data?.user);
+      Utils().playSound();
+      InformationViewer.showSuccessToast(
+          msg: startParkingResponse.message ?? '');
+      Get.find<HistoryController>().selectedIndex = 0;
+    } else {
+      Get.back();
+      InformationViewer.showErrorToast(msg: operationReply.message);
+    }
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) async {
+      setState(() {
+        result = scanData;
+      });
+      if (result != null && (result?.code ?? '').isNotEmpty) {
+        await controller.stopCamera();
+        String code = result!.code.toString();
+        debugPrint('Scanner result : $code');
+        getUserByCode(code);
+        await controller.resumeCamera();
+      }
+    });
+  }
+
+  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+    debugPrint('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    if (!p) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('no Permission')),
+      );
+    }
   }
 }
