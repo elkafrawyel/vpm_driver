@@ -19,6 +19,7 @@ class ParkingModel {
     this.startDriver,
     this.endDriver,
     this.garage,
+    this.hasRequestEnd,
   });
 
   ParkingModel.fromJson(dynamic json) {
@@ -33,6 +34,7 @@ class ParkingModel {
     startLatitude = json['start_latitude'];
     endLongitude = json['end_longitude'];
     endLatitude = json['end_latitude'];
+    hasRequestEnd = json['has_end_request'];
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
     startDriver = json['start_driver'] != null
         ? UserModel.fromJson(json['start_driver'])
@@ -60,4 +62,5 @@ class ParkingModel {
   UserModel? startDriver;
   UserModel? endDriver;
   GarageModel? garage;
+  bool? hasRequestEnd;
 }

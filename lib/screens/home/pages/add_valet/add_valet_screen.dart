@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:driver/app/extensions/space.dart';
+import 'package:driver/app/res/res.dart';
 import 'package:driver/data/models/user_model.dart';
-import 'package:driver/screens/scanner/scanner_screen.dart';
 import 'package:driver/widgets/app_widgets/app_cached_image.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/config/app_color.dart';
+import '../../../scanner/scanner_screen.dart';
 
 class AddValetScreen extends StatefulWidget {
   const AddValetScreen({Key? key}) : super(key: key);
@@ -46,24 +48,23 @@ class _AddValetScreenState extends State<AddValetScreen>
           children: [
             Offstage(
               offstage: customer != null,
-              child: IconButton(
-                onPressed: () async {
+              child: GestureDetector(
+                onTap: () async {
                   customer = await Get.to(() => const ScannerScreen());
                   if (customer != null) {
                     setState(() {});
                   }
                 },
-                icon: const Icon(
-                  Icons.qr_code_scanner_rounded,
-                  color: Colors.black,
-                  size: 220,
-                ),
+                child: SvgPicture.asset(Res.iconQr),
               ),
             ),
             Offstage(
               offstage: customer != null,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28.0,
+                  vertical: 12.0,
+                ),
                 child: AppText(
                   'scan_owner'.tr,
                   maxLines: 2,

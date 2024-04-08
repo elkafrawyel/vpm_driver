@@ -7,7 +7,7 @@ import 'package:get/state_manager.dart';
 import '../../../../../controller/home_screen/history_controller.dart';
 import '../../../../../widgets/api_state_views/handel_api_state.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
-import 'history_card.dart';
+import 'ended_history_card.dart';
 
 class EndedParkingList extends StatelessWidget {
   const EndedParkingList({super.key});
@@ -65,7 +65,7 @@ class EndedParkingList extends StatelessWidget {
                 backgroundColor: Colors.white,
                 onRefresh: historyController.refreshApiCall,
                 child: ListView.builder(
-                  itemBuilder: (context, index) => HistoryCard(
+                  itemBuilder: (context, index) => EndedHistoryCard(
                     parkingModel: historyController.endedParkingList[index],
                   ),
                   itemCount: historyController.endedParkingList.length,

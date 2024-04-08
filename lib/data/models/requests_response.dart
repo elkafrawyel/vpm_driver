@@ -16,20 +16,6 @@ class RequestsResponse {
 
   List<RequestModel>? data;
 
-  RequestsResponse copyWith({
-    List<RequestModel>? data,
-  }) =>
-      RequestsResponse(
-        data: data ?? this.data,
-      );
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    if (data != null) {
-      map['data'] = data?.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
 }
 
 class RequestModel {
@@ -44,53 +30,25 @@ class RequestModel {
 
   RequestModel.fromJson(dynamic json) {
     id = json['id'];
+    parkingId = json['parking_id'];
     createdAt = json['created_at'];
     repeatedTimes = json['repeated_times'];
+    userLatitude = json['user_latitude'];
+    userLongitude = json['user_longitude'];
     type = json['type'] != null ? Type.fromJson(json['type']) : null;
     status = json['status'] != null ? Status.fromJson(json['status']) : null;
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
   }
 
   String? id;
+  String? parkingId;
+  String? userLatitude;
+  String? userLongitude;
   String? createdAt;
   num? repeatedTimes;
   Type? type;
   Status? status;
   UserModel? user;
-
-  RequestModel copyWith({
-    String? id,
-    String? createdAt,
-    num? repeatedTimes,
-    Type? type,
-    Status? status,
-    UserModel? user,
-  }) =>
-      RequestModel(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        repeatedTimes: repeatedTimes ?? this.repeatedTimes,
-        type: type ?? this.type,
-        status: status ?? this.status,
-        user: user ?? this.user,
-      );
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['created_at'] = createdAt;
-    map['repeated_times'] = repeatedTimes;
-    if (type != null) {
-      map['type'] = type?.toJson();
-    }
-    if (status != null) {
-      map['status'] = status?.toJson();
-    }
-    if (user != null) {
-      map['user'] = user?.toJson();
-    }
-    return map;
-  }
 }
 
 class Status {

@@ -1,4 +1,5 @@
 import 'package:driver/app/extensions/space.dart';
+import 'package:driver/screens/home/pages/history/components/active_history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/state_manager.dart';
@@ -6,7 +7,7 @@ import 'package:get/state_manager.dart';
 import '../../../../../controller/home_screen/history_controller.dart';
 import '../../../../../widgets/api_state_views/handel_api_state.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
-import 'history_card.dart';
+import 'ended_history_card.dart';
 
 class ActiveParkingList extends StatelessWidget {
   const ActiveParkingList({super.key});
@@ -49,14 +50,15 @@ class ActiveParkingList extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                )
+                ),
+
               ],
             ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.builder(
-              itemBuilder: (context, index) => HistoryCard(
+              itemBuilder: (context, index) => ActiveHistoryCard(
                 parkingModel: historyController.currentParkingList[index],
               ),
               itemCount: historyController.currentParkingList.length,

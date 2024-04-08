@@ -7,12 +7,14 @@ import 'package:driver/controller/home_screen/requests_controller.dart';
 import 'package:driver/data/models/general_response.dart';
 import 'package:driver/data/models/requests_response.dart';
 import 'package:driver/data/providers/network/api_provider.dart';
+import 'package:driver/screens/map_screen/map_screen.dart';
 import 'package:driver/widgets/app_widgets/app_cached_image.dart';
 import 'package:driver/widgets/app_widgets/app_progress_button.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 
 class RequestsCard extends StatelessWidget {
@@ -84,7 +86,10 @@ class RequestsCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AppText(
-                    DateFormat(DateFormat.HOUR_MINUTE_TZ).format(
+                    DateFormat(
+                      DateFormat.HOUR_MINUTE_TZ,
+                      Get.locale!.languageCode,
+                    ).format(
                       DateTime.parse(requestModel.createdAt!),
                     ),
                     fontSize: 14,
@@ -104,7 +109,6 @@ class RequestsCard extends StatelessWidget {
             ),
           ),
           20.ph,
-
           Center(
             child: AppProgressButton(
               text: 'accept_request'.tr,
@@ -133,10 +137,18 @@ class RequestsCard extends StatelessWidget {
       GeneralResponse generalResponse = operationReply.result;
       InformationViewer.showSuccessToast(msg: generalResponse.message);
       Get.find<RequestsController>().refreshApiCall();
+      if (requestModel.type?.code == 1) {
+        Get.to(
+          () => MapScreen(
+            userModel: requestModel.user!,
+            parkingId: requestModel.parkingId!,
+            latitude: requestModel.userLatitude!,
+            longitude: requestModel.userLongitude!,
+          ),
+        );
+      }
     } else {
       InformationViewer.showErrorToast(msg: operationReply.message);
     }
   }
-
-
 }

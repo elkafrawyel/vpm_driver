@@ -202,7 +202,7 @@ Map<String, String> en = {
   'point': 'Point',
   'add': 'Add',
   'take_photo': 'Take Photo of the car',
-  'scan_owner': 'Please scan the car owner QR to get his information',
+  'scan_owner': 'Please scan the car owner QR start valet service',
   'max_image_count_is_5': 'Max image count is 5',
   'LoadingMore': 'Loading more',
   'LoadingMoreEnd': 'Loading more end',
@@ -211,5 +211,11 @@ Map<String, String> en = {
   'accept_request': 'Accept Request',
   'empty_requests': 'There is no request available at this time.',
   'refresh':'Refresh',
-  'end_park':'End Parking'
+  'end_park':'End Parking',
+  'park_car':'Park Car',
+  'car_parked':'Car Parked',
+  'show_on_map':'Show on Map',
+  'accept_end_request':'Accept End Request',
+  'map':'Map',
+
 };

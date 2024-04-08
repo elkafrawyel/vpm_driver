@@ -198,7 +198,7 @@ Map<String, String> ar = {
   'point': 'نقطة',
   'add': 'إضافة',
   'take_photo': 'تصوير السيارة',
-  'scan_owner': 'يرجى مسح QR صاحب السيارة للحصول على معلوماته',
+  'scan_owner': 'يرجى مسح QR صاحب السيارة لبدء خدمة الفالية',
   'max_image_count_is_5': 'الحد الأقصى لعدد الصور هو 5',
   'LoadingMore': 'جارٍ تحميل المزيد',
   'LoadingMoreEnd': 'لا توجد المزيد من البيانات',
@@ -207,5 +207,10 @@ Map<String, String> ar = {
   'accept_request': 'قبول الطلب',
   'empty_requests': 'لا توجد طلبات في الوقت الحالي',
   'refresh': 'تحديث',
-  'end_park':'إنهاء الركنة'
+  'end_park': 'إنهاء الركنة',
+  'park_car': 'ركن السيارة',
+  'car_parked': 'تم ركن السيارة',
+  'show_on_map': 'عرض علي الخريطة',
+  'accept_end_request': 'قبول طلب الانهاء',
+  'map': 'الخريطة',
 };

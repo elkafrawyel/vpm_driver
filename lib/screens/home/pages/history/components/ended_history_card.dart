@@ -2,8 +2,10 @@ import 'package:driver/app/extensions/space.dart';
 import 'package:driver/controller/home_screen/history_controller.dart';
 import 'package:driver/data/models/parking_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../app/config/app_color.dart';
 import '../../../../../app/res/res.dart';
@@ -15,10 +17,10 @@ import '../../../../../widgets/app_widgets/app_cached_image.dart';
 import '../../../../../widgets/app_widgets/app_progress_button.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
 
-class HistoryCard extends StatelessWidget {
+class EndedHistoryCard extends StatelessWidget {
   final ParkingModel parkingModel;
 
-  const HistoryCard({
+  const EndedHistoryCard({
     super.key,
     required this.parkingModel,
   });
@@ -65,37 +67,26 @@ class HistoryCard extends StatelessWidget {
               ),
             ),
           ),
-          if (parkingModel.endsAt == null)
-            Center(
-              child: AppProgressButton(
-                text: 'end_park'.tr,
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AppText(
+                DateFormat(
+                  DateFormat.YEAR_MONTH_WEEKDAY_DAY,
+                  Get.locale!.languageCode,
+                ).format(
+                  DateTime.parse(parkingModel.startsAt!),
+                ),
                 fontSize: 14,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                onPressed: _endRequest,
+                fontWeight: FontWeight.w100,
+                color: hintColor,
               ),
             ),
-          20.ph,
+          ),
         ],
       ),
     );
   }
 
-  Future _endRequest(AnimationController animationController) async {
-    animationController.forward();
-
-    OperationReply operationReply = await APIProvider.instance.patch(
-      endPoint: "${Res.apiEndParking}/${parkingModel.id}",
-      fromJson: GeneralResponse.fromJson,
-      requestBody: {},
-    );
-
-    if (operationReply.isSuccess()) {
-      GeneralResponse generalResponse = operationReply.result;
-      InformationViewer.showSuccessToast(msg: generalResponse.message);
-      Get.find<HistoryController>().refreshApiCall();
-    } else {
-      InformationViewer.showErrorToast(msg: operationReply.message);
-    }
-  }
 }

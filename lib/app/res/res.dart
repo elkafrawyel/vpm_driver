@@ -14,6 +14,7 @@ class Res {
   static const apiStartParking = 'driver/start-parking-car';
   static const apiEndParking = 'driver/end-parking-car';
   static const apiGetParkingList = 'driver/parked-cars/search';
+  static const apiParkCar = 'driver/confirm-start-parking-car';
 
   //========================== Animation Assets  ===============================
   static const animApiLoading = 'assets/anim/api_loading.json';
@@ -54,8 +55,11 @@ class Res {
   static const String iconBlueBorder = 'assets/icons/blue_border.svg';
   static const String iconRedBorder = 'assets/icons/red_border.svg';
   static const String iconEmptyRequests = 'assets/icons/empty_requests.svg';
+  static const String iconQr = 'assets/icons/qr.svg';
 
   //========================== Images Assets  ===============================
   static const logoImage = "assets/images/launcher/logo.png";
   static const splashBgImage = "assets/images/splash_bg.png";
+  static const locationPinImage = 'assets/images/my_pin.png';
+
 }

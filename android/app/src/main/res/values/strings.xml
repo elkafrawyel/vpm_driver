@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="channel_id" type="string">com.vpm.driver</string>
+    <string name="map_key" translatable="false">AIzaSyDHgXWlxp6SaAFhPtgrxR-_yYraLQJka78</string>
+
+</resources>

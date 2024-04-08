@@ -74,8 +74,10 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all<Color>(LightThemeColor.primaryColor),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
 
         /// button text color
         foregroundColor: MaterialStateProperty.all<Color>(Colors.white),

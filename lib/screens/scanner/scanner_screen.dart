@@ -13,7 +13,12 @@ import 'package:get/route_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScannerScreen extends StatefulWidget {
-  const ScannerScreen({super.key});
+  final bool isEndingPark;
+
+  const ScannerScreen({
+    super.key,
+    this.isEndingPark = false,
+  });
 
   @override
   State<ScannerScreen> createState() => _ScannerScreenState();
@@ -26,7 +31,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   void initState() {
-    getUserByCode('9b58836c-10cd-4dc6-8009-c86c909f83f0');
+    // getUserByCode('9b58836c-10cd-4dc6-8009-c86c909f83f0');
     super.initState();
   }
 
@@ -68,8 +73,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
-  void getUserByCode(String code) async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> getUserByCode(String code) async {
     OperationReply operationReply =
         await APIProvider.instance.post<StartParkingResponse>(
       endPoint: Res.apiStartParking,
@@ -103,7 +107,11 @@ class _ScannerScreenState extends State<ScannerScreen> {
         await controller.stopCamera();
         String code = result!.code.toString();
         debugPrint('Scanner result : $code');
-        getUserByCode(code);
+        if (widget.isEndingPark) {
+          Get.back(result: code);
+        } else {
+          await getUserByCode(code);
+        }
         await controller.resumeCamera();
       }
     });
