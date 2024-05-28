@@ -213,4 +213,5 @@ Map<String, String> ar = {
   'show_on_map': 'عرض علي الخريطة',
   'accept_end_request': 'قبول طلب الانهاء',
   'map': 'الخريطة',
+  'empty_notifications': 'لا توجد لديك اشعارات'
 };

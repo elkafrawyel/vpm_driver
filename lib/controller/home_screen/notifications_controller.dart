@@ -1,25 +1,26 @@
+import 'dart:convert';
+
+import 'package:driver/app/res/res.dart';
 import 'package:driver/app/util/operation_reply.dart';
+import 'package:driver/data/models/notifications_model.dart';
+import 'package:driver/data/models/notifications_response.dart';
+import 'package:driver/data/providers/network/api_provider.dart';
+import 'package:firebase_messaging_platform_interface/src/remote_message.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class NotificationModel {
-  String? name;
-
-  String? dateTime;
-
-  NotificationModel(this.name, this.dateTime);
-}
-
 class NotificationsController extends GetxController {
-  List<NotificationModel> notifications = [];
+  List<NotificationsModel> notifications = [];
 
-  int page = 1;
+  num page = 1;
 
-  int totalPages = 10;
+  num totalPages = 1;
 
   bool loadingMore = false, loadingMoreEnd = false;
 
   OperationReply operationReply = OperationReply.init();
+
+  NotificationsResponse? notificationsResponse;
 
   @override
   void onInit() {
@@ -31,29 +32,29 @@ class NotificationsController extends GetxController {
     operationReply = OperationReply.loading();
     update();
 
-    DateTime dateTime = DateTime.now();
-    List.generate(
-      10,
-      (index) {
-        dateTime = dateTime.subtract(
-          const Duration(hours: 1),
-        );
-        notifications.add(
-          NotificationModel(
-            'Notification $index',
-            dateTime.toIso8601String(),
-          ),
-        );
-      },
+    operationReply = await APIProvider.instance.get(
+      endPoint: '${Res.apiNotifications}?page=$page',
+      fromJson: NotificationsResponse.fromJson,
     );
 
-    // totalPages = parkingListResponse.meta?.lastPage?.toInt() ?? 1;
-    operationReply = OperationReply.success();
-    update();
+    if (operationReply.isSuccess()) {
+      notificationsResponse = operationReply.result;
+
+      notifications = notificationsResponse?.data ?? [];
+      if (notifications.isEmpty) {
+        operationReply =
+            OperationReply.empty(message: 'empty_notifications'.tr);
+        update();
+      } else {
+        totalPages = notificationsResponse?.meta?.total ?? 1;
+        operationReply = OperationReply.success();
+        update();
+      }
+    }
   }
 
   void loadMoreNotifications() async {
-    if (loadingMoreEnd) {
+    if (loadingMoreEnd || loadingMore) {
       return;
     }
     page++;
@@ -62,36 +63,35 @@ class NotificationsController extends GetxController {
       update();
       return;
     }
-
-    print('Page========>$page');
     loadingMore = true;
     update();
-    DateTime dateTime = DateTime.parse(notifications.last.dateTime!);
-    List.generate(
-      10,
-      (index) {
-        dateTime = dateTime.subtract(
-          const Duration(hours: 4),
-        );
-        notifications.add(
-          NotificationModel(
-            'Notification $index',
-            dateTime.toIso8601String(),
-          ),
-        );
-      },
+    operationReply = await APIProvider.instance.get(
+      endPoint: '${Res.apiNotifications}?page=$page',
+      fromJson: NotificationsResponse.fromJson,
     );
-    await Future.delayed(const Duration(seconds: 2));
+
+    if (operationReply.isSuccess()) {
+      notificationsResponse = operationReply.result;
+
+      notifications.addAll(notificationsResponse?.data ?? []);
+      if (notifications.isEmpty) {
+        operationReply = OperationReply.empty();
+        update();
+      } else {
+        totalPages = notificationsResponse?.meta?.lastPage ?? 1;
+        operationReply = OperationReply.success();
+        update();
+      }
+    }
     loadingMore = false;
     update();
   }
 
   Future<void> refreshApi() async {
-    notifications.clear();
     page = 1;
-    totalPages = 10;
-    loadingMoreEnd =false;
-    loadingMore=false;
+    totalPages = 1;
+    loadingMoreEnd = false;
+    loadingMore = false;
     await _loadNotifications();
   }
 
@@ -100,4 +100,14 @@ class NotificationsController extends GetxController {
       : DateFormat('EE, dd MMMM', Get.locale.toString()).format(
           DateTime.parse(dateString),
         );
+
+  void addNewNotification(RemoteMessage notification) {
+    print('adding new notification');
+    notifications.insert(
+        0,
+        NotificationsModel.fromJson(
+            jsonDecode(notification.data['notification_model'].toString())));
+    operationReply = OperationReply.success();
+    update();
+  }
 }

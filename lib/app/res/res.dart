@@ -15,6 +15,7 @@ class Res {
   static const apiEndParking = 'driver/end-parking-car';
   static const apiGetParkingList = 'driver/parked-cars/search';
   static const apiParkCar = 'driver/confirm-start-parking-car';
+  static const apiNotifications = 'notification/notifications';
 
   //========================== Animation Assets  ===============================
   static const animApiLoading = 'assets/anim/api_loading.json';

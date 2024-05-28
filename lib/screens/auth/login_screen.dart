@@ -8,6 +8,7 @@ import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:driver/widgets/app_widgets/app_progress_button.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:driver/widgets/app_widgets/app_text_field/app_text_field.dart';
+import 'package:fcm_config/fcm_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
@@ -98,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     } else {
       animationController.forward();
+      String? token = await FCMConfig.instance.messaging.getToken();
       OperationReply operationReply =
           await APIProvider.instance.post<UserResponse>(
         endPoint: Res.apiLogin,
@@ -105,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
         requestBody: {
           'user': emailController.text,
           'password': passwordController.text,
+          'notification_token': token,
         },
       );
       animationController.reverse();

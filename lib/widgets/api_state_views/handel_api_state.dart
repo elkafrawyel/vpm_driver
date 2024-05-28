@@ -39,7 +39,8 @@ class HandleApiState extends StatelessWidget {
         case OperationStatus.init:
           return const SizedBox();
         case OperationStatus.loading:
-          return shimmerLoader ?? const ApiLoadingView();
+          return Center(child: shimmerLoader ?? const CircularProgressIndicator());
+        // return shimmerLoader ?? const ApiLoadingView();
         case OperationStatus.success:
           return child;
         case OperationStatus.failed:
@@ -62,7 +63,8 @@ class HandleApiState extends StatelessWidget {
         case OperationStatus.init:
           return const SizedBox();
         case OperationStatus.loading:
-          return shimmerLoader ?? const ApiLoadingView();
+          return Center(child: shimmerLoader ?? const CircularProgressIndicator());
+          // return shimmerLoader ?? const ApiLoadingView();
         case OperationStatus.success:
           return child;
         case OperationStatus.failed:

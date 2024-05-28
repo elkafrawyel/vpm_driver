@@ -1,9 +1,12 @@
+import 'package:driver/app/extensions/space.dart';
 import 'package:driver/controller/home_screen/notifications_controller.dart';
 import 'package:driver/widgets/api_state_views/handel_api_state.dart';
+import 'package:fcm_config/fcm_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 
+import '../../../../data/models/notifications_model.dart';
 import '../../../../widgets/api_state_views/pagination_view.dart';
 import '../../../../widgets/app_widgets/app_text.dart';
 import 'components/notification_card.dart';
@@ -15,7 +18,8 @@ class NotificationsScreen extends StatefulWidget {
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
+class _NotificationsScreenState extends State<NotificationsScreen>
+    with FCMNotificationMixin {
   final NotificationsController notificationsController = Get.find();
 
   @override
@@ -28,6 +32,36 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         builder: (_) {
           return HandleApiState.operation(
             operationReply: notificationsController.operationReply,
+            emptyView: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.notifications,
+                    size: 200,
+                    color: Colors.black45,
+                  ),
+                  20.ph,
+                  AppText('empty_notifications'.tr),
+                  40.ph,
+                  ElevatedButton(
+                    onPressed: () {
+                      notificationsController.refreshApi();
+                    },
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 38.0),
+                      child: AppText(
+                        'refresh'.tr,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
             child: PaginationView(
               loadMoreData: notificationsController.loadMoreNotifications,
               showLoadMoreWidget: notificationsController.loadingMore,
@@ -36,7 +70,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 color: const Color(0xff3D6AA5),
                 backgroundColor: Colors.white,
                 onRefresh: notificationsController.refreshApi,
-                child: GroupedListView<NotificationModel, DateTime>(
+                child: GroupedListView<NotificationsModel, DateTime>(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
                   ),
@@ -47,17 +81,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   padding: const EdgeInsets.all(8),
                   elements:
                       notificationsController.notifications.reversed.toList(),
-                  groupBy: (NotificationModel notification) {
-                    DateTime date = DateTime.parse(notification.dateTime!);
+                  groupBy: (NotificationsModel notification) {
+                    DateTime date = DateTime.parse(notification.createdAt!);
                     return DateTime(
                       date.year,
                       date.month,
                       date.day,
                     );
                   },
-                  groupHeaderBuilder: (NotificationModel notificationModel) {
+                  groupHeaderBuilder: (NotificationsModel notificationModel) {
                     String date = notificationsController
-                        .convertDate(notificationModel.dateTime);
+                        .convertDate(notificationModel.createdAt);
                     String todayDate = notificationsController
                         .convertDate(DateTime.now().toString());
                     String yesterdayDate = notificationsController.convertDate(
@@ -69,7 +103,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     String title = date == todayDate
                         ? "today".tr
                         : date == yesterdayDate
-                            ? "Yesterday".tr
+                            ? "yesterday".tr
                             : date;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -96,9 +130,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ),
                     );
                   },
-                  itemBuilder: (context, NotificationModel notification) {
+                  itemBuilder: (context, NotificationsModel notification) {
                     return NotificationCard(
-                      notificationModel: notification,
+                      notificationsModel: notification,
                     );
                   },
                 ),
@@ -108,5 +142,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void onNotify(RemoteMessage notification) {
+    print('Notification Model====>${notification.data['notification_model']}');
+    notificationsController.addNewNotification(notification);
   }
 }

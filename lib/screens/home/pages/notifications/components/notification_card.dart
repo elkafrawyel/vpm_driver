@@ -1,13 +1,15 @@
 import 'package:driver/app/config/app_color.dart';
-import 'package:driver/controller/home_screen/notifications_controller.dart';
+import 'package:driver/data/providers/storage/local_provider.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class NotificationCard extends StatelessWidget {
-  final NotificationModel notificationModel;
+import '../../../../../data/models/notifications_model.dart';
 
-  const NotificationCard({super.key, required this.notificationModel});
+class NotificationCard extends StatelessWidget {
+  final NotificationsModel notificationsModel;
+
+  const NotificationCard({super.key, required this.notificationsModel});
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +17,28 @@ class NotificationCard extends StatelessWidget {
       color: Colors.white,
       elevation: 0,
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppText(
-              notificationModel.name!,
-              fontSize: 16,
+              LocalProvider().isAr()
+                  ? notificationsModel.eventNameAr ?? ''
+                  : notificationsModel.eventName ?? '',
+              fontSize: 14,
               fontWeight: FontWeight.w600,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AppText(
+                LocalProvider().isAr()
+                    ? notificationsModel.eventContentAr ?? ''
+                    : notificationsModel.eventContent ?? '',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: hintColor,
+                maxLines: 3,
+              ),
             ),
             Align(
               alignment: AlignmentDirectional.centerEnd,
@@ -30,9 +46,9 @@ class NotificationCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: AppText(
                   DateFormat(DateFormat.HOUR_MINUTE).format(
-                    DateTime.parse(notificationModel.dateTime!),
+                    DateTime.parse(notificationsModel.createdAt!),
                   ),
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w100,
                   color: hintColor,
                 ),

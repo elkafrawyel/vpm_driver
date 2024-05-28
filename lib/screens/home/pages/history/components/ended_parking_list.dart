@@ -28,7 +28,7 @@ class EndedParkingList extends StatelessWidget {
                 const Icon(
                   Icons.calendar_month,
                   size: 200,
-                  color: Colors.black54,
+                  color: Colors.black45,
                 ),
                 20.ph,
                 AppText(
