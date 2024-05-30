@@ -12,11 +12,13 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends State<HistoryScreen>
+    with AutomaticKeepAliveClientMixin {
   final HistoryController historyController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GetBuilder<HistoryController>(builder: (_) {
       return DefaultTabController(
         length: historyController.pages.length,
@@ -59,4 +61,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       );
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

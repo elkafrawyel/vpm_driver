@@ -13,7 +13,8 @@ class RequestsScreen extends StatefulWidget {
   State<RequestsScreen> createState() => _RequestsScreenState();
 }
 
-class _RequestsScreenState extends State<RequestsScreen> {
+class _RequestsScreenState extends State<RequestsScreen>
+    with AutomaticKeepAliveClientMixin {
   final RequestsController requestsController = Get.find();
 
   @override
@@ -78,4 +79,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

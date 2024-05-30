@@ -19,11 +19,12 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen>
-    with FCMNotificationMixin {
+    with FCMNotificationMixin, AutomaticKeepAliveClientMixin {
   final NotificationsController notificationsController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('notifications'.tr),
@@ -121,7 +122,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                             ),
                             child: AppText(
                               title,
-                              fontSize: 16,
+                              fontSize: 12,
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                             ),
@@ -149,4 +150,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
     print('Notification Model====>${notification.data['notification_model']}');
     notificationsController.addNewNotification(notification);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
