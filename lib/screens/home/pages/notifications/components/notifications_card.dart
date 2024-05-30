@@ -6,10 +6,10 @@ import 'package:intl/intl.dart';
 
 import '../../../../../data/models/notifications_model.dart';
 
-class NotificationCard extends StatelessWidget {
+class NotificationsCard extends StatelessWidget {
   final NotificationsModel notificationsModel;
 
-  const NotificationCard({super.key, required this.notificationsModel});
+  const NotificationsCard({super.key, required this.notificationsModel});
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ import 'package:grouped_list/grouped_list.dart';
 import '../../../../data/models/notifications_model.dart';
 import '../../../../widgets/api_state_views/pagination_view.dart';
 import '../../../../widgets/app_widgets/app_text.dart';
-import 'components/notification_card.dart';
+import 'components/notifications_card.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -132,7 +132,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     );
                   },
                   itemBuilder: (context, NotificationsModel notification) {
-                    return NotificationCard(
+                    return NotificationsCard(
                       notificationsModel: notification,
                     );
                   },
