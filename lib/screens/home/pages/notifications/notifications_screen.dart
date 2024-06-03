@@ -1,7 +1,6 @@
 import 'package:driver/app/extensions/space.dart';
 import 'package:driver/controller/home_screen/notifications_controller.dart';
 import 'package:driver/widgets/api_state_views/handel_api_state.dart';
-import 'package:fcm_config/fcm_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -19,7 +18,7 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen>
-    with FCMNotificationMixin, AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin {
   final NotificationsController notificationsController = Get.find();
 
   @override
@@ -47,7 +46,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   40.ph,
                   ElevatedButton(
                     onPressed: () {
-                      notificationsController.refreshApi();
+                      notificationsController.refreshApiCall();
                     },
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -64,13 +63,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               ),
             ),
             child: PaginationView(
-              loadMoreData: notificationsController.loadMoreNotifications,
+              loadMoreData: notificationsController.callMoreData,
               showLoadMoreWidget: notificationsController.loadingMore,
               showLoadMoreEndWidget: notificationsController.loadingMoreEnd,
               child: RefreshIndicator(
                 color: const Color(0xff3D6AA5),
                 backgroundColor: Colors.white,
-                onRefresh: notificationsController.refreshApi,
+                onRefresh: notificationsController.refreshApiCall,
                 child: GroupedListView<NotificationsModel, DateTime>(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
@@ -81,7 +80,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   floatingHeader: false,
                   padding: const EdgeInsets.all(8),
                   elements:
-                      notificationsController.notifications.reversed.toList(),
+                      notificationsController.paginationList.reversed.toList(),
                   groupBy: (NotificationsModel notification) {
                     DateTime date = DateTime.parse(notification.createdAt!);
                     return DateTime(
@@ -143,12 +142,6 @@ class _NotificationsScreenState extends State<NotificationsScreen>
         },
       ),
     );
-  }
-
-  @override
-  void onNotify(RemoteMessage notification) {
-    print('Notification Model====>${notification.data['notification_model']}');
-    notificationsController.addNewNotification(notification);
   }
 
   @override

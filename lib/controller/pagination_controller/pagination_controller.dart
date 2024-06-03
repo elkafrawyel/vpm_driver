@@ -53,7 +53,7 @@ class PaginationController<T> extends GetxController {
     String path =
         '${configData.apiEndPoint}?paginate=$paginate&page=$page&per_page=$perPage';
     if ({configData.parameters ?? {}}.isNotEmpty) {
-      configData.parameters!.forEach((key, value) {
+      configData.parameters?.forEach((key, value) {
         path += '&$key=$value';
       });
     }
@@ -93,7 +93,7 @@ class PaginationController<T> extends GetxController {
     String path =
         '${configData.apiEndPoint}?paginate=$paginate&page=$page&per_page=$perPage';
     if ({configData.parameters ?? {}}.isNotEmpty) {
-      configData.parameters!.forEach((key, value) {
+      configData.parameters?.forEach((key, value) {
         path += '&$key=$value';
       });
     }

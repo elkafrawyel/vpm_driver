@@ -25,7 +25,7 @@ class NotificationsModel {
     this.driver,
   });
 
-  NotificationsModel.fromJson(Map<String, dynamic> json) {
+  NotificationsModel.fromJson(dynamic json) {
     id = json['id'];
     eventId = json['event_id'];
     moduleCode = json['module_code'];

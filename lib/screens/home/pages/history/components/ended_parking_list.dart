@@ -1,23 +1,33 @@
 import 'package:driver/app/extensions/space.dart';
+import 'package:driver/controller/home_screen/ended_parking_controller.dart';
 import 'package:driver/widgets/api_state_views/pagination_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 
-import '../../../../../controller/home_screen/history_controller.dart';
 import '../../../../../widgets/api_state_views/handel_api_state.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
-import 'ended_history_card.dart';
+import 'ended_parking_card.dart';
 
-class EndedParkingList extends StatelessWidget {
+class EndedParkingList extends StatefulWidget {
   const EndedParkingList({super.key});
 
   @override
+  State<EndedParkingList> createState() => _EndedParkingListState();
+}
+
+class _EndedParkingListState extends State<EndedParkingList>
+    with AutomaticKeepAliveClientMixin {
+  // to keep the controller instance on memory
+  final EndedParkingController endedParkingController = Get.find();
+  @override
   Widget build(BuildContext context) {
-    return GetBuilder<HistoryController>(
-      builder: (historyController) {
+    super.build(context);
+    return GetBuilder<EndedParkingController>(
+      builder: (_) {
         return HandleApiState.operation(
-          operationReply: historyController.operationReply,
+          operationReply: endedParkingController.operationReply,
           shimmerLoader: const Center(
             child: CircularProgressIndicator(),
           ),
@@ -38,7 +48,7 @@ class EndedParkingList extends StatelessWidget {
                 40.ph,
                 ElevatedButton(
                   onPressed: () {
-                    historyController.refreshApiCall();
+                    endedParkingController.refreshApiCall();
                   },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
@@ -57,18 +67,18 @@ class EndedParkingList extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: PaginationView(
-              loadMoreData: historyController.loadMoreParking,
-              showLoadMoreWidget: historyController.loadingMore,
-              showLoadMoreEndWidget: historyController.loadingMoreEnd,
+              loadMoreData: endedParkingController.callMoreData,
+              showLoadMoreWidget: endedParkingController.loadingMore,
+              showLoadMoreEndWidget: endedParkingController.loadingMoreEnd,
               child: RefreshIndicator(
                 color: const Color(0xff3D6AA5),
                 backgroundColor: Colors.white,
-                onRefresh: historyController.refreshApiCall,
+                onRefresh: endedParkingController.refreshApiCall,
                 child: ListView.builder(
-                  itemBuilder: (context, index) => EndedHistoryCard(
-                    parkingModel: historyController.endedParkingList[index],
+                  itemBuilder: (context, index) => EndedParkingCard(
+                    parkingModel: endedParkingController.paginationList[index],
                   ),
-                  itemCount: historyController.endedParkingList.length,
+                  itemCount: endedParkingController.paginationList.length,
                 ),
               ),
             ),
@@ -77,4 +87,7 @@ class EndedParkingList extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

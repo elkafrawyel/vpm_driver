@@ -1,26 +1,17 @@
-import 'package:driver/app/extensions/space.dart';
-import 'package:driver/controller/home_screen/history_controller.dart';
 import 'package:driver/data/models/parking_model.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../app/config/app_color.dart';
-import '../../../../../app/res/res.dart';
-import '../../../../../app/util/information_viewer.dart';
-import '../../../../../app/util/operation_reply.dart';
-import '../../../../../data/models/general_response.dart';
-import '../../../../../data/providers/network/api_provider.dart';
 import '../../../../../widgets/app_widgets/app_cached_image.dart';
-import '../../../../../widgets/app_widgets/app_progress_button.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
 
-class EndedHistoryCard extends StatelessWidget {
+class EndedParkingCard extends StatelessWidget {
   final ParkingModel parkingModel;
 
-  const EndedHistoryCard({
+  const EndedParkingCard({
     super.key,
     required this.parkingModel,
   });
@@ -75,9 +66,9 @@ class EndedHistoryCard extends StatelessWidget {
                 DateFormat(
                   DateFormat.YEAR_MONTH_WEEKDAY_DAY,
                   Get.locale!.languageCode,
-                ).format(
-                  DateTime.parse(parkingModel.startsAt!),
-                ),
+                ).add_jmv().format(
+                      DateTime.parse(parkingModel.startsAt!),
+                    ),
                 fontSize: 14,
                 fontWeight: FontWeight.w100,
                 color: hintColor,
@@ -88,5 +79,4 @@ class EndedHistoryCard extends StatelessWidget {
       ),
     );
   }
-
 }

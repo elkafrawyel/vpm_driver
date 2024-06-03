@@ -1,7 +1,7 @@
 import 'package:driver/app/config/app_color.dart';
-import 'package:driver/data/providers/storage/local_provider.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../data/models/notifications_model.dart';
@@ -22,7 +22,7 @@ class NotificationsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppText(
-              LocalProvider().isAr()
+              Get.locale?.languageCode == "ar"
                   ? notificationsModel.eventNameAr ?? ''
                   : notificationsModel.eventName ?? '',
               fontSize: 14,
@@ -31,7 +31,7 @@ class NotificationsCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: AppText(
-                LocalProvider().isAr()
+                Get.locale?.languageCode == "ar"
                     ? notificationsModel.eventContentAr ?? ''
                     : notificationsModel.eventContent ?? '',
                 fontSize: 12,
@@ -45,7 +45,10 @@ class NotificationsCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppText(
-                  DateFormat(DateFormat.HOUR_MINUTE).format(
+                  DateFormat(
+                    "hh:mm a",
+                    Get.locale?.languageCode,
+                  ).format(
                     DateTime.parse(notificationsModel.createdAt!),
                   ),
                   fontSize: 12,

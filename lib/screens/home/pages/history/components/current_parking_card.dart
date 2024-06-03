@@ -1,4 +1,5 @@
 import 'package:driver/app/extensions/space.dart';
+import 'package:driver/controller/home_screen/current_parking_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,6 @@ import '../../../../../app/config/app_color.dart';
 import '../../../../../app/res/res.dart';
 import '../../../../../app/util/information_viewer.dart';
 import '../../../../../app/util/operation_reply.dart';
-import '../../../../../controller/home_screen/history_controller.dart';
 import '../../../../../data/models/general_response.dart';
 import '../../../../../data/models/parking_model.dart';
 import '../../../../../data/providers/network/api_provider.dart';
@@ -160,7 +160,7 @@ class ActiveHistoryCard extends StatelessWidget {
   Future _parkCar(AnimationController animationController) async {
     animationController.forward();
     Position position =
-        await Get.find<HistoryController>().getMyPosition(loading: true);
+        await Get.find<CurrentParkingController>().getMyPosition(loading: true);
 
     OperationReply operationReply = await APIProvider.instance.patch(
       endPoint: "${Res.apiParkCar}/${parkingModel.id}",
@@ -174,7 +174,7 @@ class ActiveHistoryCard extends StatelessWidget {
     if (operationReply.isSuccess()) {
       GeneralResponse generalResponse = operationReply.result;
       InformationViewer.showSuccessToast(msg: generalResponse.message);
-      Get.find<HistoryController>().refreshApiCall();
+      Get.find<CurrentParkingController>().refreshApiCall();
     } else {
       InformationViewer.showErrorToast(msg: operationReply.message);
     }

@@ -1,8 +1,10 @@
 import 'package:driver/app/config/app_color.dart';
 import 'package:driver/controller/home_screen/home_screen_controller.dart';
+import 'package:driver/controller/home_screen/notifications_controller.dart';
+import 'package:fcm_config/fcm_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,12 +13,15 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with FCMNotificationMixin, FCMNotificationClickMixin {
+  final HomeScreenController homeScreenController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeScreenController>(
       init: HomeScreenController(),
-      builder: (homeScreenController) => Scaffold(
+      builder: (_) => Scaffold(
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: homeScreenController.selectedTabIndex!,
           onTap: homeScreenController.handleIndexChanged,
@@ -71,5 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void onNotify(RemoteMessage notification) {
+    if (kDebugMode) {
+      print(
+          'Notification Model====>\n${notification.data['notification_model']}');
+    }
+
+    Get.find<NotificationsController>().addNewNotification(notification);
+    homeScreenController.handleNotificationClick(
+      notification,
+      withNavigation: false,
+    );
+  }
+
+  @override
+  void onClick(RemoteMessage notification) {
+    homeScreenController.handleNotificationClick(notification);
   }
 }

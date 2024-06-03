@@ -12,10 +12,10 @@ class RequestsController extends GeneralController {
   void onInit() {
     super.onInit();
 
-    _loadRequests();
+    loadRequests();
   }
 
-  void _loadRequests({bool loading = true}) async {
+  void loadRequests({bool loading = true}) async {
     operationReply = OperationReply.success();
     if (loading) {
       operationReply = OperationReply.loading();
@@ -31,13 +31,14 @@ class RequestsController extends GeneralController {
       requests = requestsResponse.data ?? [];
       if (requests.isEmpty) {
         operationReply = OperationReply.empty();
+      } else {
+        operationReply = OperationReply.success();
       }
     }
-
   }
 
   @override
-  Future<void> refreshApiCall()async {
-    _loadRequests();
+  Future<void> refreshApiCall() async {
+    loadRequests();
   }
 }

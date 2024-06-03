@@ -4,11 +4,9 @@ import 'package:driver/app/res/res.dart';
 import 'package:driver/app/util/information_viewer.dart';
 import 'package:driver/app/util/operation_reply.dart';
 import 'package:driver/app/util/util.dart';
-import 'package:driver/controller/home_screen/history_controller.dart';
 import 'package:driver/data/models/start_parking_response.dart';
 import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -87,8 +85,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
       Get.back(result: startParkingResponse.data?.user);
       Utils().playSound();
       InformationViewer.showSuccessToast(
-          msg: startParkingResponse.message ?? '');
-      Get.find<HistoryController>().selectedIndex = 0;
+        msg: startParkingResponse.message ?? '',
+      );
     } else {
       Get.back();
       InformationViewer.showErrorToast(msg: operationReply.message);
