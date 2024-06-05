@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:driver/controller/home_screen/current_parking_controller.dart';
 import 'package:driver/controller/home_screen/requests_controller.dart';
 import 'package:driver/screens/home/pages/add_valet/add_valet_screen.dart';
-import 'package:driver/screens/home/pages/history/parking_screen.dart';
 import 'package:driver/screens/home/pages/menu/menu_screen.dart';
+import 'package:driver/screens/home/pages/parking/parking_screen.dart';
 import 'package:fcm_config/fcm_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class HomeScreenController extends GetxController {
     pageController = PageController(initialPage: 0);
     pages = [
       const RequestsScreen(),
-      const HistoryScreen(),
+      const ParkingScreen(),
       const AddValetScreen(),
       const NotificationsScreen(),
       const MenuScreen(),
@@ -69,19 +70,30 @@ class HomeScreenController extends GetxController {
         notification.data['notification_model'].toString(),
       ),
     );
-    switch (notificationsModel.moduleCode) {
-      case 1:
-        Get.find<RequestsController>().loadRequests(loading: false);
-        if (withNavigation) {
-          Get.find<HomeScreenController>().handleIndexChanged(0);
-        }
-        break;
 
-      // Get.find<CurrentParkingController>().callApi();
-      // if (withNavigation) {
-      //   Get.find<HomeScreenController>().handleIndexChanged(1);
-      // }
+    Get.find<RequestsController>().loadRequests(loading: false);
+    if (withNavigation) {
+      Get.find<HomeScreenController>().handleIndexChanged(0);
     }
+    Get.find<CurrentParkingController>().refreshApiCall();
+    if (withNavigation) {
+      Get.find<HomeScreenController>().handleIndexChanged(1);
+    }
+    // switch (notificationsModel.moduleCode) {
+    //   case 1:
+    //     Get.find<RequestsController>().loadRequests(loading: false);
+    //     if (withNavigation) {
+    //       Get.find<HomeScreenController>().handleIndexChanged(0);
+    //     }
+    //     break;
+    //
+    //   case 2:
+    //     Get.find<CurrentParkingController>().refreshApiCall();
+    //     if (withNavigation) {
+    //       Get.find<HomeScreenController>().handleIndexChanged(1);
+    //     }
+    //     break;
+    // }
   }
 }
 

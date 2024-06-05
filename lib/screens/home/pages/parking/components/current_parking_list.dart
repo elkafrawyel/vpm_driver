@@ -1,6 +1,5 @@
 import 'package:driver/app/extensions/space.dart';
 import 'package:driver/controller/home_screen/current_parking_controller.dart';
-import 'package:driver/screens/home/pages/history/components/current_parking_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
@@ -9,6 +8,7 @@ import 'package:get/state_manager.dart';
 import '../../../../../widgets/api_state_views/handel_api_state.dart';
 import '../../../../../widgets/api_state_views/pagination_view.dart';
 import '../../../../../widgets/app_widgets/app_text.dart';
+import 'current_parking_card.dart';
 
 class CurrentParkingList extends StatefulWidget {
   const CurrentParkingList({super.key});

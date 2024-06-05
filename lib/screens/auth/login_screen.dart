@@ -9,11 +9,13 @@ import 'package:driver/widgets/app_widgets/app_progress_button.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:driver/widgets/app_widgets/app_text_field/app_text_field.dart';
 import 'package:fcm_config/fcm_config.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
 
 import '../../data/providers/storage/local_provider.dart';
+import '../../firebase_options.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -99,6 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     } else {
       animationController.forward();
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform
+      );
       String? token = await FCMConfig.instance.messaging.getToken();
       OperationReply operationReply =
           await APIProvider.instance.post<UserResponse>(

@@ -6,14 +6,14 @@ import '../../../../app/types/booking_tabs_type.dart';
 import 'components/current_parking_list.dart';
 import 'components/ended_parking_list.dart';
 
-class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+class ParkingScreen extends StatefulWidget {
+  const ParkingScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
+  State<ParkingScreen> createState() => _ParkingScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen>
+class _ParkingScreenState extends State<ParkingScreen>
     with AutomaticKeepAliveClientMixin {
   List<Widget> pages = [
     const CurrentParkingList(),

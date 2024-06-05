@@ -21,6 +21,7 @@ import '../../data/models/general_response.dart';
 import '../../data/providers/network/api_provider.dart';
 import '../../widgets/app_widgets/app_text.dart';
 import '../../widgets/dialogs_view/app_dialog_view.dart';
+import '../scanner/scanner_screen.dart';
 
 class MapScreen extends StatefulWidget {
   final UserModel userModel;
@@ -123,10 +124,10 @@ class _MapScreenState extends State<MapScreen> {
   String? customerId;
 
   Future _endRequest() async {
-    // customerId = await Get.to(() => const ScannerScreen(
-    //       isEndingPark: true,
-    //     ));
-    customerId = '9c334e0e-bb90-4428-ae51-ef935cfd56de';
+    customerId = await Get.to(() => const ScannerScreen(
+          isEndingPark: true,
+        ));
+    // customerId = '9c334e0e-bb90-4428-ae51-ef935cfd56de';
     if (customerId != null) {
       if (customerId == widget.userModel.id) {
         Utils().playSound();
