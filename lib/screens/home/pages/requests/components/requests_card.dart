@@ -3,6 +3,7 @@ import 'package:driver/app/extensions/space.dart';
 import 'package:driver/app/res/res.dart';
 import 'package:driver/app/util/information_viewer.dart';
 import 'package:driver/app/util/operation_reply.dart';
+import 'package:driver/controller/home_screen/current_parking_controller.dart';
 import 'package:driver/controller/home_screen/requests_controller.dart';
 import 'package:driver/data/models/general_response.dart';
 import 'package:driver/data/models/requests_response.dart';
@@ -138,6 +139,7 @@ class RequestsCard extends StatelessWidget {
       InformationViewer.showSuccessToast(msg: generalResponse.message);
       Get.find<RequestsController>().refreshApiCall();
       if (requestModel.type?.code == 1) {
+        Get.find<CurrentParkingController>().refreshApiCall();
         Get.to(
           () => MapScreen(
             userModel: requestModel.user!,

@@ -36,15 +36,10 @@ class ParkingModel {
     endLatitude = json['end_latitude'];
     hasRequestEnd = json['has_end_request'];
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
-    startDriver = json['start_driver'] != null
-        ? UserModel.fromJson(json['start_driver'])
-        : null;
+    startDriver = json['start_driver'] != null ? UserModel.fromJson(json['start_driver']) : null;
 
-    endDriver = json['end_driver'] != null
-        ? UserModel.fromJson(json['end_driver'])
-        : null;
-    garage =
-        json['garage'] != null ? GarageModel.fromJson(json['garage']) : null;
+    endDriver = json['end_driver'] != null ? UserModel.fromJson(json['end_driver']) : null;
+    garage = json['garage'] != null ? GarageModel.fromJson(json['garage']) : null;
   }
 
   String? id;

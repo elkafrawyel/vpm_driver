@@ -101,9 +101,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     } else {
       animationController.forward();
-      await Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform
-      );
       String? token = await FCMConfig.instance.messaging.getToken();
       OperationReply operationReply =
           await APIProvider.instance.post<UserResponse>(

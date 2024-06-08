@@ -34,25 +34,6 @@ class HomeScreenController extends GetxController {
       const NotificationsScreen(),
       const MenuScreen(),
     ];
-    initializeNotifications();
-  }
-
-  Future initializeNotifications() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    await FCMConfig.instance.init(
-      onBackgroundMessage: _firebaseMessagingBackgroundHandler,
-      defaultAndroidChannel: const AndroidNotificationChannel(
-        'com.vpm.diver',
-        'Driver',
-      ),
-    );
-
-    FCMConfig.instance.messaging.getToken().then((token) {
-      Utils.logMessage('Firebase Token:$token');
-    });
   }
 
   handleIndexChanged(int index) {
@@ -71,34 +52,26 @@ class HomeScreenController extends GetxController {
       ),
     );
 
-    Get.find<RequestsController>().loadRequests(loading: false);
-    if (withNavigation) {
-      Get.find<HomeScreenController>().handleIndexChanged(0);
-    }
-    Get.find<CurrentParkingController>().refreshApiCall();
-    if (withNavigation) {
-      Get.find<HomeScreenController>().handleIndexChanged(1);
-    }
-    // switch (notificationsModel.moduleCode) {
-    //   case 1:
-    //     Get.find<RequestsController>().loadRequests(loading: false);
-    //     if (withNavigation) {
-    //       Get.find<HomeScreenController>().handleIndexChanged(0);
-    //     }
-    //     break;
-    //
-    //   case 2:
-    //     Get.find<CurrentParkingController>().refreshApiCall();
-    //     if (withNavigation) {
-    //       Get.find<HomeScreenController>().handleIndexChanged(1);
-    //     }
-    //     break;
-    // }
-  }
-}
+    switch (notificationsModel.moduleCode) {
+      case 1:
+        switch (notificationsModel.eventCode) {
+          case 1:
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  Utils.logMessage("Handling a background message: ${message.messageId}");
-  // handleNotificationClick(message.notification);
+            ///تم ارسال طلب سائق
+            ///REQUEST_START_PARKING
+            Get.find<RequestsController>().refreshApiCall();
+            break;
+            case 4:
+
+            ///تم ارسال طلب إنهاء ركنة
+            ///REQUEST_END_PARKING
+            Get.find<RequestsController>().refreshApiCall();
+            break;
+        }
+        break;
+
+      case 2:
+        break;
+    }
+  }
 }

@@ -109,7 +109,7 @@ class ActiveHistoryCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                    if (parkingModel.hasRequestEnd ?? false)
+                    if ((parkingModel.hasRequestEnd ?? false) && parkingModel.endDriver != null)
                       ElevatedButton(
                         onPressed: () {
                           Get.to(
@@ -140,8 +140,7 @@ class ActiveHistoryCard extends StatelessWidget {
           //       onPressed: _endRequest,
           //     ),
           //   ),
-          if (parkingModel.startConfirmedAt == null &&
-              parkingModel.endsAt == null)
+          if (parkingModel.startConfirmedAt == null && parkingModel.endsAt == null)
             Center(
               child: AppProgressButton(
                 text: 'park_car'.tr,
@@ -159,8 +158,7 @@ class ActiveHistoryCard extends StatelessWidget {
 
   Future _parkCar(AnimationController animationController) async {
     animationController.forward();
-    Position position =
-        await Get.find<CurrentParkingController>().getMyPosition(loading: true);
+    Position position = await Get.find<CurrentParkingController>().getMyPosition(loading: true);
 
     OperationReply operationReply = await APIProvider.instance.patch(
       endPoint: "${Res.apiParkCar}/${parkingModel.id}",
