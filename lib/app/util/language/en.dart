@@ -217,6 +217,7 @@ Map<String, String> en = {
   'show_on_map':'Show on Map',
   'accept_end_request':'Accept End Request',
   'map':'Map',
-  'empty_notifications':'Empty Notifications'
-
+  'empty_notifications':'Empty Notifications',
+  'refuse_request':'Refuse Request',
+  'refuse_reason':'Refuse Reason',
 };

@@ -11,6 +11,7 @@ class Res {
   static const apiLogout = 'auth/logout';
   static const apiRequests = 'driver/request-drivers';
   static const apiAcceptRequest = 'driver/request-driver-accept';
+  static const apiRefuseRequest = 'driver/request-driver-disaccept';
   static const apiStartParking = 'driver/start-parking-car';
   static const apiEndParking = 'driver/end-parking-car';
   static const apiGetParkingList = 'driver/parked-cars/search';
