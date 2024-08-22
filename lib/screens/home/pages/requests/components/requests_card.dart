@@ -66,42 +66,17 @@ class RequestsCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            trailing: IconButton(
-              onPressed: () {
-                Utils.callPhoneNumber(phoneNumber: requestModel.user?.phone ?? '');
-              },
-              icon: Icon(
-                Icons.call,
-                color: Theme.of(context).primaryColor,
+            trailing: Offstage(
+              offstage: requestModel.status?.code == 2,
+              child: IconButton(
+                onPressed: () {
+                  Utils.callPhoneNumber(phoneNumber: requestModel.user?.phone ?? '');
+                },
+                icon: Icon(
+                  Icons.call,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppText(
-                  requestModel.status?.name ?? '',
-                  color: Colors.orange,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AppText(
-                    DateFormat(
-                      DateFormat.HOUR_MINUTE_TZ,
-                      Get.locale!.languageCode,
-                    ).format(
-                      DateTime.parse(requestModel.createdAt!),
-                    ),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w100,
-                    color: hintColor,
-                  ),
-                ),
-              ],
             ),
           ),
           Padding(
@@ -112,38 +87,102 @@ class RequestsCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          20.ph,
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Center(
-                    child: AppProgressButton(
-                      text: 'accept_request'.tr,
-                      fontSize: 14,
-                      backgroundColor: Colors.black,
-                      textColor: Colors.white,
-                      onPressed: _acceptRequest,
-                    ),
-                  ),
+                AppText(
+                  requestModel.status?.name ?? '',
+                  color: requestModel.status?.code == 2 ? Colors.red : Colors.orange,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                12.pw,
-                Expanded(
-                  child: Center(
-                    child: AppProgressButton(
-                      text: 'refuse_request'.tr,
-                      fontSize: 14,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      onPressed: (animationController) => _refuseRequest(context),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      AppText(
+                        DateFormat(
+                          DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY,
+                          Get.locale!.languageCode,
+                        ).format(
+                          DateTime.parse(requestModel.createdAt!),
+                        ),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w100,
+                        color: hintColor,
+                      ),
+                      AppText(
+                        DateFormat(
+                          DateFormat.HOUR_MINUTE_SECOND,
+                          Get.locale!.languageCode,
+                        ).format(
+                          DateTime.parse(requestModel.createdAt!),
+                        ),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w100,
+                        color: hintColor,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
+          20.ph,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                if (requestModel.status?.code == 0)
+                  Expanded(
+                    child: Center(
+                      child: AppProgressButton(
+                        text: 'accept_request'.tr,
+                        fontSize: 14,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        onPressed: _acceptRequest,
+                      ),
+                    ),
+                  ),
+                12.pw,
+                if (requestModel.status?.code == 1 && requestModel.parkingId == null)
+                  Expanded(
+                    child: Center(
+                      child: AppProgressButton(
+                        text: 'refuse_request'.tr,
+                        fontSize: 14,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        onPressed: (animationController) => _refuseRequest(context),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
           10.ph,
+          if (requestModel.reason != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: AppText(
+                'refuse_reason'.tr,
+                color: hintColor,
+              ),
+            ),
+          if (requestModel.reason != null)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(top: 12, bottom: 28, start: 18),
+              child: AppText(
+                requestModel.reason ?? '',
+                maxLines: 5,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+              ),
+            ),
         ],
       ),
     );
@@ -185,51 +224,61 @@ class RequestsCard extends StatelessWidget {
       context: context,
       initialChildSize: 0.4,
       minChildSize: 0.4,
-      maxChildSize: 0.8,
+      maxChildSize: 0.9,
       builder: (context, scrollController) {
         final TextEditingController reasonController = TextEditingController();
 
         return Container(
           color: Colors.white,
-          child: SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              children: [
-                AppTextFormField(
-                  controller: reasonController,
-                  hintText: 'refuse_reason'.tr,
-                  maxLines: 5,
-                  horizontalPadding: 12,
-                ),
-                Center(
-                  child: AppProgressButton(
-                    text: 'refuse_request'.tr,
-                    backgroundColor: Colors.red,
-                    onPressed: (animationController) async {
-                      animationController.forward();
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText(
+                      'refuse_reason'.tr,
+                    ),
+                    AppTextFormField(
+                      controller: reasonController,
+                      hintText: 'refuse_reason'.tr,
+                      maxLines: 5,
+                      horizontalPadding: 12,
+                    ),
+                    Center(
+                      child: AppProgressButton(
+                        text: 'refuse_request'.tr,
+                        backgroundColor: Colors.red,
+                        onPressed: (animationController) async {
+                          animationController.forward();
 
-                      OperationReply operationReply = await APIProvider.instance.patch(
-                        endPoint: "${Res.apiRefuseRequest}/${requestModel.id}",
-                        fromJson: GeneralResponse.fromJson,
-                        requestBody: {
-                          'reasone': reasonController.text,
+                          OperationReply operationReply = await APIProvider.instance.patch(
+                            endPoint: "${Res.apiRefuseRequest}/${requestModel.id}",
+                            fromJson: GeneralResponse.fromJson,
+                            requestBody: {
+                              'reasone': reasonController.text,
+                            },
+                          );
+
+                          if (operationReply.isSuccess()) {
+                            GeneralResponse generalResponse = operationReply.result;
+                            InformationViewer.showSuccessToast(msg: generalResponse.message);
+                            animationController.reverse();
+                            await Future.delayed(const Duration(milliseconds: 100));
+                            Get.back();
+                            Get.find<RequestsController>().refreshApiCall();
+                          } else {
+                            InformationViewer.showErrorToast(msg: operationReply.message);
+                          }
                         },
-                      );
-
-                      if (operationReply.isSuccess()) {
-                        GeneralResponse generalResponse = operationReply.result;
-                        InformationViewer.showSuccessToast(msg: generalResponse.message);
-                        animationController.reverse();
-                        await Future.delayed(const Duration(milliseconds: 100));
-
-                        Get.find<RequestsController>().refreshApiCall();
-                      } else {
-                        InformationViewer.showErrorToast(msg: operationReply.message);
-                      }
-                    },
-                  ),
-                )
-              ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         );

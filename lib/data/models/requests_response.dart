@@ -26,6 +26,7 @@ class RequestModel {
     this.type,
     this.status,
     this.user,
+    this.reason,
   });
 
   RequestModel.fromJson(dynamic json) {
@@ -35,6 +36,7 @@ class RequestModel {
     repeatedTimes = json['repeated_times'];
     userLatitude = json['user_latitude'];
     userLongitude = json['user_longitude'];
+    reason = json['reasone'];
     type = json['type'] != null ? Type.fromJson(json['type']) : null;
     status = json['status'] != null ? Status.fromJson(json['status']) : null;
     user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
@@ -45,6 +47,7 @@ class RequestModel {
   String? userLatitude;
   String? userLongitude;
   String? createdAt;
+  String? reason;
   num? repeatedTimes;
   Type? type;
   Status? status;

@@ -12,8 +12,8 @@ Future showAppModalBottomSheet({
 }) async {
   await showCupertinoModalPopup(
     context: context,
-    // isScrollControlled: true,
     // backgroundColor: Colors.transparent,
+    barrierDismissible: false,
     builder: (context) => GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => Navigator.of(context).pop(),
