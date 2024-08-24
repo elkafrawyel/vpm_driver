@@ -11,6 +11,7 @@ import 'package:driver/data/models/requests_response.dart';
 import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:driver/screens/map_screen/map_screen.dart';
 import 'package:driver/widgets/app_widgets/app_cached_image.dart';
+import 'package:driver/widgets/app_widgets/app_dialog.dart';
 import 'package:driver/widgets/app_widgets/app_progress_button.dart';
 import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:driver/widgets/app_widgets/app_text_field/app_text_field.dart';
@@ -131,43 +132,51 @@ class RequestsCard extends StatelessWidget {
               ],
             ),
           ),
-          20.ph,
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                if (requestModel.status?.code == 0)
-                  Expanded(
-                    child: Center(
-                      child: AppProgressButton(
-                        text: 'accept_request'.tr,
-                        fontSize: 14,
-                        backgroundColor: Colors.black,
-                        textColor: Colors.white,
-                        onPressed: _acceptRequest,
+          if ((requestModel.status?.code == 0) || (requestModel.status?.code == 1 && requestModel.parkingId == null))
+            20.ph,
+          if ((requestModel.status?.code == 0) || (requestModel.status?.code == 1 && requestModel.parkingId == null))
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  if (requestModel.status?.code == 0)
+                    Expanded(
+                      child: Center(
+                        child: AppProgressButton(
+                          text: 'accept_request'.tr,
+                          fontSize: 14,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          onPressed: _acceptRequest,
+                        ),
                       ),
                     ),
-                  ),
-                12.pw,
-                if (requestModel.status?.code == 1 && requestModel.parkingId == null)
-                  Expanded(
-                    child: Center(
-                      child: AppProgressButton(
-                        text: 'refuse_request'.tr,
-                        fontSize: 14,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        onPressed: (animationController) => _refuseRequest(context),
+                  12.pw,
+                  if (requestModel.status?.code == 1 && requestModel.parkingId == null)
+                    Expanded(
+                      child: Center(
+                        child: AppProgressButton(
+                          text: 'cancel_request'.tr,
+                          fontSize: 14,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          onPressed: (animationController) => _refuseRequest(context),
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-          10.ph,
+          if (requestModel.reason != null) 10.ph,
+          if (requestModel.reason != null)
+            const Divider(
+              indent: 12,
+              endIndent: 12,
+              thickness: 0.2,
+            ),
           if (requestModel.reason != null)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppText(
                 'refuse_reason'.tr,
                 color: hintColor,
@@ -175,7 +184,7 @@ class RequestsCard extends StatelessWidget {
             ),
           if (requestModel.reason != null)
             Padding(
-              padding: const EdgeInsetsDirectional.only(top: 12, bottom: 28, start: 18),
+              padding: const EdgeInsetsDirectional.only(top: 12, bottom: 28, start: 38),
               child: AppText(
                 requestModel.reason ?? '',
                 maxLines: 5,
@@ -220,69 +229,61 @@ class RequestsCard extends StatelessWidget {
   Future _refuseRequest(
     BuildContext context,
   ) async {
-    showAppModalBottomSheet(
-      context: context,
-      initialChildSize: 0.4,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) {
-        final TextEditingController reasonController = TextEditingController();
-
-        return Container(
+    final TextEditingController reasonController = TextEditingController();
+    showAppDialog(
+        context,
+        Container(
           color: Colors.white,
           child: Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      'refuse_reason'.tr,
-                    ),
-                    AppTextFormField(
-                      controller: reasonController,
-                      hintText: 'refuse_reason'.tr,
-                      maxLines: 5,
-                      horizontalPadding: 12,
-                    ),
-                    Center(
-                      child: AppProgressButton(
-                        text: 'refuse_request'.tr,
-                        backgroundColor: Colors.red,
-                        onPressed: (animationController) async {
-                          animationController.forward();
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText(
+                    'refuse_reason'.tr,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  AppTextFormField(
+                    controller: reasonController,
+                    hintText: 'refuse_reason'.tr,
+                    maxLines: 5,
+                    horizontalPadding: 12,
+                  ),
+                  Center(
+                    child: AppProgressButton(
+                      text: 'refuse_request'.tr,
+                      backgroundColor: Colors.red,
+                      onPressed: (animationController) async {
+                        animationController.forward();
 
-                          OperationReply operationReply = await APIProvider.instance.patch(
-                            endPoint: "${Res.apiRefuseRequest}/${requestModel.id}",
-                            fromJson: GeneralResponse.fromJson,
-                            requestBody: {
-                              'reasone': reasonController.text,
-                            },
-                          );
+                        OperationReply operationReply = await APIProvider.instance.patch(
+                          endPoint: "${Res.apiRefuseRequest}/${requestModel.id}",
+                          fromJson: GeneralResponse.fromJson,
+                          requestBody: {
+                            'reasone': reasonController.text,
+                          },
+                        );
 
-                          if (operationReply.isSuccess()) {
-                            GeneralResponse generalResponse = operationReply.result;
-                            InformationViewer.showSuccessToast(msg: generalResponse.message);
-                            animationController.reverse();
-                            await Future.delayed(const Duration(milliseconds: 100));
-                            Get.back();
-                            Get.find<RequestsController>().refreshApiCall();
-                          } else {
-                            InformationViewer.showErrorToast(msg: operationReply.message);
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                        if (operationReply.isSuccess()) {
+                          GeneralResponse generalResponse = operationReply.result;
+                          InformationViewer.showSuccessToast(msg: generalResponse.message);
+                          animationController.reverse();
+                          await Future.delayed(const Duration(milliseconds: 100));
+                          Get.back();
+                          Get.find<RequestsController>().refreshApiCall();
+                        } else {
+                          InformationViewer.showErrorToast(msg: operationReply.message);
+                        }
+                      },
+                    ),
+                  )
+                ],
               ),
             ),
           ),
-        );
-      },
-    );
+        ),
+        barrierDismissible: true);
   }
 }

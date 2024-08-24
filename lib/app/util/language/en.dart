@@ -218,6 +218,6 @@ Map<String, String> en = {
   'accept_end_request':'Accept End Request',
   'map':'Map',
   'empty_notifications':'Empty Notifications',
-  'refuse_request':'Refuse Request',
-  'refuse_reason':'Refuse Reason',
+  'cancel_request':'Cancel Request',
+  'cancel_reason':'Cancel Reason',
 };

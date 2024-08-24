@@ -51,32 +51,32 @@ class _MenuScreenState extends State<MenuScreen> {
                 fontSize: 20,
               ),
             ),
-            ListTile(
-              onTap: () {},
-              leading: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              title: AppText(
-                'profile'.tr,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 20,
-              ),
-            ),
+            // ListTile(
+            //   onTap: () {},
+            //   leading: Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.black,
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: const Padding(
+            //       padding: EdgeInsets.all(8.0),
+            //       child: Icon(
+            //         Icons.person,
+            //         color: Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            //   title: AppText(
+            //     'profile'.tr,
+            //     color: Colors.black,
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 16,
+            //   ),
+            //   trailing: const Icon(
+            //     Icons.arrow_forward_ios,
+            //     size: 20,
+            //   ),
+            // ),
             ListTile(
               onTap: () {},
               leading: Container(
