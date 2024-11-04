@@ -7,7 +7,7 @@ class Environment {
       case AppMode.staging:
         return 'https://portal.profitsway.net/New_Parking/api/';
       case AppMode.live:
-        return 'https://portal.profitsway.net/New_Parking/api/';
+        return 'https://back.vpmsystems.com/api/';
     }
   }
 }

@@ -6,16 +6,13 @@ import 'package:driver/controller/app_config_controller.dart';
 import 'package:driver/data/models/user_response.dart';
 import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:driver/widgets/app_widgets/app_progress_button.dart';
-import 'package:driver/widgets/app_widgets/app_text.dart';
 import 'package:driver/widgets/app_widgets/app_text_field/app_text_field.dart';
 import 'package:fcm_config/fcm_config.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:get/instance_manager.dart';
 
 import '../../data/providers/storage/local_provider.dart';
-import '../../firebase_options.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -65,16 +62,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 appFieldType: AppFieldType.text,
                 textInputAction: TextInputAction.done,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: AppText('forget_password?'.tr),
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {},
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: Align(
+              //       alignment: AlignmentDirectional.centerStart,
+              //       child: AppText('forget_password?'.tr),
+              //     ),
+              //   ),
+              // ),
               20.ph,
               AppProgressButton(
                 text: 'signIn'.tr,
