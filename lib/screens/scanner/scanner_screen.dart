@@ -1,14 +1,6 @@
 import 'dart:io';
 
-import 'package:driver/app/res/res.dart';
-import 'package:driver/app/util/information_viewer.dart';
-import 'package:driver/app/util/operation_reply.dart';
-import 'package:driver/app/util/util.dart';
-import 'package:driver/controller/home_screen/current_parking_controller.dart';
-import 'package:driver/data/models/start_parking_response.dart';
-import 'package:driver/data/providers/network/api_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -31,7 +23,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   void initState() {
-    // getUserByCode('9b58836c-10cd-4dc6-8009-c86c909f83f0');
     super.initState();
   }
 
@@ -73,29 +64,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
     );
   }
 
-  Future<void> getUserByCode(String code) async {
-    OperationReply operationReply =
-        await APIProvider.instance.post<StartParkingResponse>(
-      endPoint: Res.apiStartParking,
-      fromJson: StartParkingResponse.fromJson,
-      requestBody: {
-        'user_id': code,
-      },
-    );
-    if (operationReply.isSuccess()) {
-      StartParkingResponse startParkingResponse = operationReply.result;
-      Get.back(result: startParkingResponse.data?.user);
-      Utils().playSound();
-      InformationViewer.showSuccessToast(
-        msg: startParkingResponse.message ?? '',
-      );
-      Get.find<CurrentParkingController>().refreshApiCall();
-    } else {
-      Get.back();
-      InformationViewer.showErrorToast(msg: operationReply.message);
-    }
-  }
-
   void _onQRViewCreated(QRViewController controller) {
     setState(() {
       this.controller = controller;
@@ -111,7 +79,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
         if (widget.isEndingPark) {
           Get.back(result: code);
         } else {
-          await getUserByCode(code);
+          Get.back(result: code);
         }
         await controller.resumeCamera();
       }
