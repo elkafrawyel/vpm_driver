@@ -217,11 +217,13 @@ class _MapScreenState extends State<MapScreen> {
         myLocation!.longitude.toString(),
       ),
     );
-    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-      googleMapKey,
-      origin,
-      destination,
-      travelMode: TravelMode.driving,
+    PolylineResult result =
+        await PolylinePoints(apiKey: googleMapKey).getRouteBetweenCoordinates(
+      request: PolylineRequest(
+        origin: origin,
+        destination: destination,
+        mode: TravelMode.driving,
+      ),
     );
     List<LatLng> polylineCoordinates = [];
 

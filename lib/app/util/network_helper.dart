@@ -14,10 +14,10 @@ class NetworkHelper {
   }
 
   static Future<bool> isConnected() async {
-    ConnectivityResult connectivityResult =
+    List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
-    return connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi;
+    return connectivityResult.first == ConnectivityResult.mobile ||
+        connectivityResult.first == ConnectivityResult.wifi;
   }
 
   ///Don't forget to cast it to function return type using [as] method

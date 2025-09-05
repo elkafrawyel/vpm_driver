@@ -17,7 +17,7 @@ class AppConfigController extends GetxController {
   RxBool isDarkMode = false.obs;
   Rx<ThemeData> theme = AppTheme.lightTheme.obs;
   String appVersion = "Not detected";
-  late StreamSubscription<ConnectivityResult> subscription;
+  late StreamSubscription<List<ConnectivityResult>> subscription;
 
   List<Locale> supportedLocales = const [
     Locale('ar', 'EG'),
@@ -50,10 +50,10 @@ class AppConfigController extends GetxController {
 
   Future<void> _watchNetworkState() async {
     /// this for app initialization only
-    ConnectivityResult connectivityResult =
+    List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi) {
+    if (connectivityResult.first == ConnectivityResult.mobile ||
+        connectivityResult.first == ConnectivityResult.wifi) {
       // I am connected to a mobile network.
       Utils.hideGetXDialog();
     } else {
@@ -63,9 +63,9 @@ class AppConfigController extends GetxController {
     /// this for listen in app
     subscription = Connectivity()
         .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
+        .listen((List<ConnectivityResult> result) {
+      if (result.first == ConnectivityResult.mobile ||
+          result.first == ConnectivityResult.wifi) {
         // I am connected to a mobile network.
         Utils.hideGetXDialog();
       } else {

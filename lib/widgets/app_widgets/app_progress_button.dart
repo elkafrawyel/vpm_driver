@@ -62,34 +62,7 @@ class AppProgressButtonState extends State<AppProgressButton>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    controller.addStatusListener((status) {
-      switch (status) {
-        case AnimationStatus.dismissed:
-          // TODO: Handle this case.
-          break;
-        case AnimationStatus.forward:
 
-          /// here we are reversing the state of the animation controller
-          /// to reserve the initial state of the animation controller in
-          ///  case of exception
-          Future.delayed(const Duration(seconds: 5), () {
-            try {
-              if (mounted) {
-                controller.reverse();
-              }
-            } catch (e) {
-              Utils.logMessage(e.toString());
-            }
-          });
-          break;
-        case AnimationStatus.reverse:
-          // TODO: Handle this case.
-          break;
-        case AnimationStatus.completed:
-          // TODO: Handle this case.
-          break;
-      }
-    });
   }
 
   @override

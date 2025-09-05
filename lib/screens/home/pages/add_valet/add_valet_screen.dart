@@ -241,7 +241,7 @@ class _AddValetScreenState extends State<AddValetScreen>
                 backgroundColor: Colors.black,
                 onPressed: (animationController) async {
                   if (userId != null) {
-                    getUserByCode();
+                    getUserByCode(animationController: animationController);
                   }
                 },
               ),
@@ -255,7 +255,8 @@ class _AddValetScreenState extends State<AddValetScreen>
   @override
   bool get wantKeepAlive => true;
 
-  Future<void> getUserByCode() async {
+  Future<void> getUserByCode(
+      {required AnimationController animationController}) async {
     if (userId == null) {
       return;
     }
@@ -274,6 +275,7 @@ class _AddValetScreenState extends State<AddValetScreen>
     //   );
     // }
 
+    animationController.forward();
     OperationReply operationReply =
         await APIProvider.instance.post<StartParkingResponse>(
       endPoint: Res.apiStartParking,
@@ -286,6 +288,7 @@ class _AddValetScreenState extends State<AddValetScreen>
       //     .toList(),
       files: images.map((element) => MapEntry('files', element)).toList(),
     );
+    animationController.reverse();
     if (operationReply.isSuccess()) {
       StartParkingResponse startParkingResponse = operationReply.result;
       Utils().playSound();
